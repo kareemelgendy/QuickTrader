@@ -1,0 +1,28 @@
+{
+    "name": "QuickTrader",
+    "description": "This extension will help traders with TD Direct Investing find and enter at the best limit order price for faster trade execution.",
+    "version": "1.0",
+    "manifest_version": 2,
+
+    "icons": {
+        "16": "./assets/icon16.png",
+        "32": "./assets/icon32.png",
+        "48": "./assets/icon48.png",
+        "128": "./assets/icon128.png"
+    },
+    
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "scripts": ["./background.js"] 
+    },
+
+    "options_page": "./options.html",
+
+    "permissions": [
+        "tabs", 
+        "https://*/"
+    ]
+}
