@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 
-<head>
-    <title>QuickTrader</title>
-    <link rel="stylesheet" type="text/css" href="./main.css">
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700;900&display=swap" rel="stylesheet">
-</head>
-    <body>
+    <head>
+        <title>QuickTrader</title>
+        <link rel="stylesheet" type="text/css" href="./main.css">
+        <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700;900&display=swap" rel="stylesheet">
+    </head>
+    
+    <div class="header">
         <h1>QuickTrader</h1>
         <h2>Pick Limit Type: </h2>
-        <label><input type="checkbox" id="Bid Checkbox"> Bid</label><br>
-        <label><input type="checkbox" id="Above Bid Checkbox"> Above Bid</label><br>
-        <label><input type="checkbox" id="Middle Price Checkbox"> Middle Price</label><br>
-        <label><input type="checkbox" id="Below Ask Checkbox"> Below Ask</label><br>
-        <label><input type="checkbox" id="Ask Checkbox"> Ask</label>
-        <p><br>To learn more about this extension & how it works <a href = "./options.html">click here</p>
-    </body>
+    </div>
+
+    <div class="fill-selection">
+        <input type="radio" name="fill" value="bid">Bid<br></input>
+        <input type="radio" name="fill" value="above bid">Above Bid<br></input>
+        <input type="radio" name="fill" value="middle price">Middle Price<br></input>
+        <input type="radio" name="fill" value="below ask">Below Ask<br></input>
+        <input type="radio" name="fill" value="ask">Ask</input>
+        <a href="javascript: getSelection()"></a>
+    </div>
 </html>
