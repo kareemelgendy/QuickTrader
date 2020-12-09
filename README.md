@@ -3,6 +3,6 @@ A Google Chrome extension that assists day traders with TD Direct Investing find
 
 # Screenshots
 <p>
-  <img src="https://imgur.com/a/Ageuevq"/>
-  <img src="https://imgur.com/a/gqiBSZW"/>
+  <img src="https://imgur.com/a/Ageuevq.png"/>
+  <img src="https://imgur.com/a/gqiBSZW.png"/>
 </p>
