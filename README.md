@@ -1,2 +1,7 @@
 # QuickTrader
- A Chrome extension that assists traders with TD Direct Investing find and enter at the best limit order price for faster trade execution. 
+A Google Chrome extension that assists day traders with TD Direct Investing find and enter the best limit order price for faster trade execution through the TD WebBroker Dashboard. 
+
+# Screenshots
+<p>
+  <img src="https://i.imgur.com/227oDtP.png"/>
+</p>

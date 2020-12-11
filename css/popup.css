@@ -1,0 +1,59 @@
+html {
+    height: 225px;
+    width: 200px;
+    background-color: white;
+    padding: 20px;
+}
+
+h1, h2, label, p {
+    font-family: 'Raleway', sans-serif;
+    color: black;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+h2 {
+    font-weight: 400;
+}
+
+label {
+    font-weight: 100;
+    font-size: 18px;
+}
+
+img {
+    height: 2.5em;
+    vertical-align: middle;
+    padding-right: 10px;
+    text-align: center;
+    display: inline;
+}
+
+p {
+    padding-bottom: 15px;
+    font-weight: 100;
+    font-size: 14px;
+}
+
+#savebtn {
+    margin-top: 10px;
+}
+
+button {
+    background-color: #5CC05F; 
+    border: none;
+    border-radius: 18px;
+    color: white;
+    padding: 5px 7px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #49974C; 
+    color: white;
+}

@@ -1,22 +1,27 @@
-<!DOCTYPE html>
-
+<html>
     <head>
         <title>QuickTrader</title>
-        <link rel="stylesheet" type="text/css" href="./main.css">
+        <link rel="stylesheet" type="text/css" href="./css/popup.css">
         <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;400;700;900&display=swap" rel="stylesheet">
     </head>
-    
-    <div class="header">
-        <h1>QuickTrader</h1>
-        <h2>Pick Limit Type: </h2>
-    </div>
 
-    <div class="fill-selection">
-        <input type="radio" name="fill" value="bid">Bid<br></input>
-        <input type="radio" name="fill" value="above bid">Above Bid<br></input>
-        <input type="radio" name="fill" value="middle price">Middle Price<br></input>
-        <input type="radio" name="fill" value="below ask">Below Ask<br></input>
-        <input type="radio" name="fill" value="ask">Ask</input>
-        <a href="javascript: getSelection()"></a>
-    </div>
+    <body>
+        <div class="header">
+            <img src="img/logo.png" id="popup_logo" style="float:left"/>
+            <h1>QuickTrader</h1>
+            <h2>Pick Limit Type: </h2>
+        </div>
+
+        <div id="fill-selection">
+            <input type="radio" name="option" value="Bid"><label>Bid<br></label>
+            <input type="radio" name="option" value="Above Bid"><label>Above Bid<br></label>
+            <input type="radio" name="option" value="Middle Price"><label>Middle Price<br></label>
+            <input type="radio" name="option" value="Below Ask"><label>Below Ask<br></label>
+            <input type="radio" name="option" value="Ask"><label>Ask<br></label>
+            <button id="savebtn" type="submit">save</button>
+        </div>
+
+        <p>To learn more <a href="options.html" target="_blank">click here</a></p>
+        <script text="text/javascript" src="./js/popup.js"></script>
+    </body>
 </html>
