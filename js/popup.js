@@ -56,6 +56,18 @@ async function restorePreviousOption(){
     });
 }
 
+function checkPage(url){
+    let optionOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/option/edit';
+    let stockOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/equity/edit';
+    let optionOrderPageOther = optionOrderPage.replace('#', '?=#');
+    let stockOrderPageOther = stockOrderPage.replace('#', '?=#');
+
+    if(url == optionOrderPage || url == stockOrderPage || url == optionOrderPageOther || url == stockOrderPageOther){
+        return true;
+    } 
+    return false;
+}
+
 window.addEventListener('load', function() {
 
     // Popup open

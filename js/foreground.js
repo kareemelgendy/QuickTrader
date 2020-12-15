@@ -26,30 +26,22 @@ function requiredFields(securityType){
     const tickerField = document.getElementById('selectedSymbol');
     if(tickerField && tickerField.value){
 
-        console.log('ticker valid');
-
         // Option Contracts
         if(securityType == 'option'){
-
             // Dropdown fields - Strike, Expiry, Type
             let count = 0;
             const dropdowns = document.getElementsByClassName('td-wb-dropdown-toggle__placeholder ng-star-inserted');
             if(dropdowns){
-
                 for(field of dropdowns){
-                    console.log(field.selected);
                     if(field.innerText != 'Select'){
                         count ++;
-                        console.log('dropdown ' + count);
                     }
                 }
             }
 
             // Contract Price Type
             let optionsPriceType = document.getElementById('td-wb-dropdown-order-price');
-            console.log(optionsPriceType + '-------' + count + '-------' + optionsPriceType.innerText.split('\n')[1]);
             if(optionsPriceType && count <= 1 && optionsPriceType.innerText.split('\n')[1] == 'Limit'){
-                console.log('option filled');
                 return true;
             }
 
@@ -57,9 +49,7 @@ function requiredFields(securityType){
         } else if(securityType == 'equity'){
             // Stocks Price Type
             let stocksPriceType = document.getElementById('td-wb-dropdown-order-price');
-            console.log(stocksPriceType + '-------' + '-------' + stocksPriceType.innerText[1]);
             if(stocksPriceType && stocksPriceType.innerText.split('\n')[1] == 'Limit'){
-                console.log('stocks filled');
                 return true;
             }            
         }
@@ -112,11 +102,8 @@ function getQuote(fillType){
 
 // Fills the limit price field
 function fillField(fillType){
-    // let price = parseFloat(getQuote(fillType));
     let price = getQuote(fillType);
     const priceField = document.getElementById('td-wb-order-price-amount-limit-price');
-    priceField.dispatchEvent(new Event('focus'));
     priceField.value = price.toFixed(2);
     priceField.dispatchEvent(new Event('keyup'));
-    priceField.dispatchEvent(new Event('blur'));
 }
