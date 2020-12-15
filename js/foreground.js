@@ -107,3 +107,9 @@ function fillField(fillType){
     priceField.value = price.toFixed(2);
     priceField.dispatchEvent(new Event('keyup'));
 }
+
+// Getting the security type
+var securityType;
+chrome.runtime.onMessage.addListener(function (response) {
+    securityType = response.security;
+});
