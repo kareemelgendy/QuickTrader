@@ -1,79 +1,122 @@
 
+// Returns the user's fill selection
+function getFillType(){
+
+    var selection;
+    var fillType = new Promise(function(success){
+        chrome.storage.local.get(['fillType'], function(result) {
+
+            // If nothing is saved, use default
+            if(result.fillType == undefined){
+                selection = 'Middle Price';
+                chrome.storage.local.set({'fillType': selection});
+            } else{
+                selection = result.fillType;
+            }
+            success(selection);
+        });
+    });
+    return fillType;
+}
+
 // Check if the all the required fields are filled 
 function requiredFields(securityType){
 
-    // Ticker Symbol - Both Stocks and Options
-    if(document.getElementsByTagName('td-wb-symbol-lookup')[0].className != undefined){
-        tickerField = document.getElementsByTagName('td-wb-symbol-lookup')[0].className;
-    }
-    if(tickerField == 'ng-untouched ng-dirty ng-valid'){ 
-        if(securityType == "option"){
-            var strikePrice = document.getElementsByClassName('td-wb-option-picker__strike-price ng-untouched ng-pristine ng-invalid').length; 
-            var contractExpiry = document.getElementsByClassName('td-wb-option-picker__expiry-date ng-untouched ng-pristine ng-invalid').length; 
-            var contractType = document.getElementsByClassName('td-wb-option-picker__option-type ng-untouched ng-pristine ng-invalid').length; 
-            
-            if(document.getElementsByClassName('td-wb-dropdown-order-price ng-untouched ng-valid ng-dirty').length == 0){
-                optionsPriceType = document.getElementsByClassName('ng-star-inserted')[184].innerText;
-            } else {
-                optionsPriceType = document.getElementsByClassName('td-wb-dropdown-order-price ng-untouched ng-valid ng-dirty')[0].innerText.split('\n')[1]; 
-            }
-            // All required fields for options are filled
-            if(strikePrice == 0 && contractExpiry == 0 && contractType == 0 && optionsPriceType == 'Limit'){
-                return true;
-            }
-        // Checking the final required field for stocks
-        } else if (securityType == 'equity'){
-            if(document.getElementsByClassName('td-wb-dropdown-order-price ng-untouched ng-dirty').length == 1){
-                stocksPriceType = document.getElementsByClassName('td-wb-dropdown-order-price ng-untouched ng-valid ng-dirty')[0].innerText.split('\n')[1]; 
-                if(stocksPriceType == 'Limit'){
-                    return true;
+    // Ticker Symbol
+    const tickerField = document.getElementById('selectedSymbol');
+    if(tickerField && tickerField.value){
+
+        console.log('ticker valid');
+
+        // Option Contracts
+        if(securityType == 'option'){
+
+            // Dropdown fields - Strike, Expiry, Type
+            let count = 0;
+            const dropdowns = document.getElementsByClassName('td-wb-dropdown-toggle__placeholder ng-star-inserted');
+            if(dropdowns){
+
+                for(field of dropdowns){
+                    console.log(field.selected);
+                    if(field.innerText != 'Select'){
+                        count ++;
+                        console.log('dropdown ' + count);
+                    }
                 }
             }
+
+            // Contract Price Type
+            let optionsPriceType = document.getElementById('td-wb-dropdown-order-price');
+            console.log(optionsPriceType + '-------' + count + '-------' + optionsPriceType.innerText.split('\n')[1]);
+            if(optionsPriceType && count <= 1 && optionsPriceType.innerText.split('\n')[1] == 'Limit'){
+                console.log('option filled');
+                return true;
+            }
+
+        // Stocks
+        } else if(securityType == 'equity'){
+            // Stocks Price Type
+            let stocksPriceType = document.getElementById('td-wb-dropdown-order-price');
+            console.log(stocksPriceType + '-------' + '-------' + stocksPriceType.innerText[1]);
+            if(stocksPriceType && stocksPriceType.innerText.split('\n')[1] == 'Limit'){
+                console.log('stocks filled');
+                return true;
+            }            
         }
-    } 
+    }
     return false;
 }
 
-// Function to get the Stock/Option Contract Quote
+// Gets the Stock/Option Contract Quote
+// Returns the limit price 
 function getQuote(fillType){
 
     // Getting the quote
-    quote = document.getElementsByClassName('td-wb-trading-quote-section'); // change to .querySelector
+    quote = document.getElementsByClassName('td-wb-trading-quote-section'); 
     tradingPrice = quote[1].innerText.split("\n")[1].split(" ");
 
-    // Deriving the Bid, Ask & Underlying Security's Spread from the quote
+    // Deriving the bid, ask & security's spread from the quote
     let bid = tradingPrice[0].substring(1).replace(",", "");
     let ask = tradingPrice[2].substring(1).replace(",", "");
     let spread = (ask - bid).toFixed(2);
-    // Calculating Median and First & Third Quartiles
+
+    // Calculating the median and first & third quartiles
     let median = +bid + +(spread/2).toFixed(2);
     let lowerQuartile = +bid + +((median - bid)/2).toFixed(2);
     let upperQuartile = +median + +((ask - median)/2).toFixed(2); 
 
     var fill;
-    // Checking user's selected fill type and passing the corresponding price
-    if(fillType == "Bid"){
-        fill = bid;
-    } else if(fillType == "Above Bid"){
-        fill = lowerQuartile;
-    } else if(fillType == "Middle Price"){
-        fill = median;
-    } else if(fillType == "Below Ask"){
-        fill = upperQuartile;
-    } else if(fillType == "Ask"){
-        fill = ask;
+
+    // Returning the price 
+    switch(fillType){
+        case 'Bid':
+            fill = bid;
+            break;
+        case 'Above Bid':
+            fill = lowerQuartile;
+            break;
+        case 'Middle Price':
+            fill = median;
+            break;
+        case 'Below Ask':
+            fill = upperQuartile;
+            break;
+        case 'Ask':
+            fill = ask;
+            break;
+        default:
+            fill = median;
     }
     return fill;
 }
 
-// Filling field
+// Fills the limit price field
 function fillField(fillType){
-    let price = parseFloat(getQuote(fillType));
+    // let price = parseFloat(getQuote(fillType));
+    let price = getQuote(fillType);
     const priceField = document.getElementById('td-wb-order-price-amount-limit-price');
     priceField.dispatchEvent(new Event('focus'));
-    priceField.dispatchEvent(new Event('input'));
     priceField.value = price.toFixed(2);
     priceField.dispatchEvent(new Event('keyup'));
-    priceField.dispatchEvent(new Event('change'), {bubbles: true});
     priceField.dispatchEvent(new Event('blur'));
 }

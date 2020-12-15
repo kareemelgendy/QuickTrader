@@ -1,30 +1,35 @@
 
+function checkPage(URL){
+
+    let optionOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/option/edit';
+    let stockOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/equity/edit';
+    let optionOrderPageOther = optionOrderPage.replace('#', '?=#');
+    let stockOrderPageOther = stockOrderPage.replace('#', '?=#');
+
+    if(URL == optionOrderPage || URL == stockOrderPage || URL == optionOrderPageOther || URL == stockOrderPageOther){
+        return true;
+    } 
+    return false;
+}
+
 // Function that executes the scripts on the order entry page
-function tdScript(active_url){
+function tdScript(activeURL){
 
-    // Links to the stock and option order pages
-    let option_order_page = /^https:\/\/webbroker\.td\.com\/waw\/brk\/wb\/wbr\/static\/main\/index\.html\#\/modal\/trading\/order-entry\/option\/edit/;
-    let option_order_page_other = /^https:\/\/webbroker\.td\.com\/waw\/brk\/wb\/wbr\/static\/main\/index\.html\?\=\#\/modal\/trading\/order-entry\/option\/edit/;
-    let stock_order_page = /^https:\/\/webbroker\.td\.com\/waw\/brk\/wb\/wbr\/static\/main\/index\.html\#\/modal\/trading\/order-entry\/equity\/edit/;
-    let stock_order_page_other = /^https:\/\/webbroker\.td\.com\/waw\/brk\/wb\/wbr\/static\/main\/index\.html\?\=\#\/modal\/trading\/order-entry\/equity\/edit/;
+    // Valid page
+    if(checkPage(activeURL)){
+        let securityType = activeURL.split("/").slice(-2)[0]; // Security type
 
-    security_type = active_url.split("/").slice(-2)[0]; // Getting the security type
-
-    // If the user is on the Dashboard Order Page
-    if((stock_order_page.test(active_url))  || (stock_order_page_other.test(active_url)) ||
-        (option_order_page.test(active_url)) || (option_order_page_other.test(active_url))){
-
-        // Sending security type
+        // Sending security type to script
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-            chrome.tabs.sendMessage(tabs[0].id, {security: security_type});  
+            chrome.tabs.sendMessage(tabs[0].id, {security: securityType}); 
         }); 
 
         // Executing the script
-        chrome.tabs.executeScript({file: './js/foreground.js'}, () => console.log("Injecting"));
+        chrome.tabs.executeScript(null, {file: './js/foreground.js'});
         
         // Listening for badge command
         chrome.runtime.onMessage.addListener(function(message) {
-            if(message.status == "Fields Filled"){
+            if(message.status == "Order Page Complete"){
                 chrome.browserAction.setBadgeText({text: 'ON'});
                 chrome.browserAction.setBadgeBackgroundColor({color: '#4688F1'});
             } else {
@@ -32,22 +37,20 @@ function tdScript(active_url){
             }
         });
 
-    // If user leaves the order page 
+    // Order page left
     } else {
         chrome.browserAction.setBadgeText({text:''});
     }
 }
 
-// Listen to users current tab
-chrome.tabs.onActivated.addListener(function(tab) {
-    chrome.tabs.get(tab.tabId, current => {
-        tdScript(current.url);
+// Get new tab information
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+    chrome.tabs.get(activeInfo.tabId, function(tab){
+        tdScript(tab.url);
     });
-});
+}); 
 
-// Listen for URL changes in user's active tab (switching between securities)
-chrome.tabs.onUpdated.addListener(function(updated, tab) {
-    if(tab.active && updated.url){
-        tdScript(updated.url);
-    }
+// Listening for changes to current tab
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    tdScript(tab.url, () => console.log('url change'));
 }); 

@@ -16,7 +16,7 @@
     },
 
     "background": {
-        "scripts": ["./js/background.js"]
+        "scripts": ["./js/background.js", "./js/popup.js"]
     },
 
     "options_page": "./options.html",

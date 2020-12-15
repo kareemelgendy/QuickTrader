@@ -8,8 +8,8 @@ function saveOptions(selection){
 function getUserSelection(){
 
     const options = document.querySelectorAll('input[name="option"]');
+    
     let selectedValue;
-
     for (const selection of options){
         if(selection.checked){
             selectedValue = selection.value;
@@ -56,16 +56,24 @@ async function restorePreviousOption(){
     });
 }
 
-// Popup
 window.addEventListener('load', function() {
 
+    // Popup open
     if(location.hash == '#popup'){
         restorePreviousOption();
 
+        // Save button click
         const btn = document.getElementById('savebtn');
         btn.addEventListener('click', function() {
             getUserSelection();
             btn.blur();
+
+            // Executing the script with updated fill type
+            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                if(checkPage(tabs[0].url) && optionTableStatus() != 1){
+                    chrome.tabs.executeScript(null, {file: './js/foreground.js'}, () => console.log("Injecting"));
+                }
+            }); 
         });
     }
 });
