@@ -56,6 +56,7 @@ async function restorePreviousOption(){
     });
 }
 
+// Check if user is on a valid page
 function checkPage(url){
     let optionOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/option/edit';
     let stockOrderPage = 'https://webbroker.td.com/waw/brk/wb/wbr/static/main/index.html#/modal/trading/order-entry/equity/edit';
