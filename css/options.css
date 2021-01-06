@@ -1,9 +1,9 @@
 html {
     padding: 50px;
-    width: 50%;
+    width: 60%;
 }
 
-h1, h2, label, p, li {
+body {
     font-family: 'Raleway', sans-serif;
     color: black;
 }
@@ -24,7 +24,7 @@ p, li {
 }
 
 img {
-    height: 5em;
+    height: 4em;
     vertical-align: middle;
     padding-right: 20px;
     display: inline;
