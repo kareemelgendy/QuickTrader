@@ -103,7 +103,7 @@ function getQuote(fillType){
             default:
                 fill = median;
         }
-        return fill;
+        return parseFloat(fill);
     }
     return null;
 }
